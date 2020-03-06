@@ -21,3 +21,4 @@ app.listen(port, () => console.log(`Server started successfully at ${port}`));
 
 //API for adding account
 app.use('/API/accountModel', require('./APIs/addAccount'));
+app.use('/API/addBooking', require('./APIs/addBooking'));

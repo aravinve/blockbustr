@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const Account = require('../database/accountSchema');
 const route = express.Router();
 
-console.log(Account);
 route.post('/', async(req,res)=>{
     const { username, password, firstName, lastName, email } = req.body;
     let account = {};
@@ -13,7 +12,7 @@ route.post('/', async(req,res)=>{
     account.lastName = lastName;
     account.email = email;
 
-    let accountModel = new User(account);
+    let accountModel = new Account(account);
     await accountModel.save();
     res.json(accountModel);
 });

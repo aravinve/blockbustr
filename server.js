@@ -20,5 +20,5 @@ const port = process.env.Port || 5000;
 app.listen(port, () => console.log(`Server started successfully at ${port}`));
 
 //API for adding account
-app.use('/API/accountModel', require('./APIs/addAccount'));
 app.use('/API/addBooking', require('./APIs/addBooking'));
+app.use('/API/accountModel', require('./APIs/addAccount'));

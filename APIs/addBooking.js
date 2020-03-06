@@ -6,14 +6,10 @@ const route = express.Router();
 route.post('/', async(req,res)=>{
     const { transactionID, username, movie } = req.body;
     let booking = {};
-    booking.transactionID = username;
-    booking.username = password;
-    booking.movie.title = movie.title;
-    booking.movie.date = movie.date;
-    booking.movie.time = movie.time;
-    booking.movie.location = movie.location;
-    booking.movie.hall = movie.hall;
-    booking.movie.seats = movie.seats;
+    console.log(movie);
+    booking.transactionID = transactionID;
+    booking.username = username;
+    booking.movie = movie;
 
     let bookingModel = new Booking(booking);
     await bookingModel.save();

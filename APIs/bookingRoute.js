@@ -6,7 +6,6 @@ const route = express.Router();
 route.post('/', async(req,res)=>{
     const { transactionID, username, movie } = req.body;
     let booking = {};
-    console.log(movie);
     booking.transactionID = transactionID;
     booking.username = username;
     booking.movie = movie;

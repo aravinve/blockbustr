@@ -1,6 +1,5 @@
 import React from 'react';
-
-function Login(props) {
+function Login (props)  {
   return (
     <React.Fragment>
       <div className='bg-light m-2 p-2'>
@@ -17,6 +16,8 @@ function Login(props) {
                       type='email'
                       className='form-control'
                       placeholder='Email Address'
+                      name='username'
+                      onChange={props.handleComponentChange}
                     />
                   </div>
                   <div className='form-group'>
@@ -26,6 +27,7 @@ function Login(props) {
                       placeholder='Password'
                       id='password'
                       name='password'
+                      onChange={props.handleComponentChange}
                     />
                     <div
                       onClick={props.showForgot}
@@ -39,6 +41,7 @@ function Login(props) {
                       className='btn btn-success'
                       type='submit'
                       value='Login'
+                      onClick={props.validateUser}
                     />
                   </div>
                 </div>

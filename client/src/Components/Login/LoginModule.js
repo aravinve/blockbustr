@@ -15,6 +15,31 @@ class LoginModule extends Component {
     lastName: '',
     email: ''
   };
+
+//validate the user on entering the credentials
+validateUser = (event) => {
+    event.preventDefault();
+    const payLoad = {
+      username: this.state.username ,
+      password: this.state.password
+    };
+    console.log(payLoad);
+
+    axios.post('/API/validateUser', payLoad).then(res => {
+      if (res.data.success) {
+        this.setState({
+          firstName: '',
+          lastName: '',
+          username: '',
+          password: '',
+          email: ''
+        });
+        alert('Logged In Successfully');
+      }
+    });
+
+  };
+
   toggleShowForgot = () => {
     this.setState({
       isShowForgot: !this.state.isShowForgot,
@@ -55,6 +80,7 @@ class LoginModule extends Component {
   handleComponentChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
+
   validatePassword = e => {
     if (this.state.password !== e.target.value) {
       console.log('No Match');
@@ -69,6 +95,8 @@ class LoginModule extends Component {
               <Login
                 showForgot={this.toggleShowForgot}
                 showRegister={this.toggleShowRegister}
+                validateUser={this.validateUser}
+                handleComponentChange={this.handleComponentChange}
               />
             ) : null}
             {this.state.isShowRegister ? (

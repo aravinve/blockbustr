@@ -16,30 +16,6 @@ class LoginModule extends Component {
     email: ''
   };
 
-//validate the user on entering the credentials
-validateUser = (event) => {
-    event.preventDefault();
-    const payLoad = {
-      username: this.state.username ,
-      password: this.state.password
-    };
-    console.log(payLoad);
-
-    axios.post('/API/validateUser', payLoad).then(res => {
-      if (res.data.success) {
-        this.setState({
-          firstName: '',
-          lastName: '',
-          username: '',
-          password: '',
-          email: ''
-        });
-        alert('Logged In Successfully');
-      }
-    });
-
-  };
-
   toggleShowForgot = () => {
     this.setState({
       isShowForgot: !this.state.isShowForgot,
@@ -57,7 +33,7 @@ validateUser = (event) => {
   registerUser = e => {
     e.preventDefault();
     const payLoad = {
-      username: this.state.firstName + this.state.lastName,
+      username: this.state.email,
       firstName: this.state.firstName,
       lastName: this.state.lastName,
       email: this.state.email,
@@ -85,6 +61,27 @@ validateUser = (event) => {
     if (this.state.password !== e.target.value) {
       console.log('No Match');
     }
+  };
+  //validate the user on entering the credentials
+  validateUser = event => {
+    event.preventDefault();
+    const payLoad = {
+      username: this.state.username,
+      password: this.state.password
+    };
+    axios.post('/API/validateUser', payLoad).then(res => {
+      if (res.data.success) {
+        alert('Logged In Successfully');
+        this.props.toggleLoginState(this.state.username);
+        this.setState({
+          firstName: '',
+          lastName: '',
+          username: '',
+          password: '',
+          email: ''
+        });
+      }
+    });
   };
   render() {
     return (

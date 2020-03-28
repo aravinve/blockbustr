@@ -1,20 +1,24 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 import axios from 'axios';
 import Login from './Login';
 import Register from './Register';
 import Forgot from './Forgot';
 
 class LoginModule extends Component {
-  state = {
-    isShowLogin: true,
-    isShowRegister: false,
-    isShowForgot: false,
-    username: '',
-    password: '',
-    firstName: '',
-    lastName: '',
-    email: ''
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isShowLogin: true,
+      isShowRegister: false,
+      isShowForgot: false,
+      username: '',
+      password: '',
+      firstName: '',
+      lastName: '',
+      email: ''
+    };
+  }
 
   toggleShowForgot = () => {
     this.setState({
@@ -72,7 +76,18 @@ class LoginModule extends Component {
     axios.post('/API/validateUser', payLoad).then(res => {
       if (res.data.success) {
         alert('Logged In Successfully');
-        this.props.toggleLoginState(this.state.username);
+        this.setState({
+          firstName: res.data.user.firstName,
+          lastName: res.data.user.lastName,
+          username: res.data.user.username,
+          password: res.data.user.password,
+          email: res.data.user.email
+        });
+        localStorage.setItem('secretKey', res.data.token);
+        localStorage.setItem('userData', JSON.stringify(this.state));
+        localStorage.setItem('isLoggedIn', res.data.success);
+        this.props.setUserdata(this.state, res.data.success);
+        this.props.history.push('/');
         this.setState({
           firstName: '',
           lastName: '',
@@ -115,4 +130,4 @@ class LoginModule extends Component {
   }
 }
 
-export default LoginModule;
+export default withRouter(LoginModule);

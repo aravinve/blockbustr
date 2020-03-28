@@ -72,7 +72,15 @@ class LoginModule extends Component {
     axios.post('/API/validateUser', payLoad).then(res => {
       if (res.data.success) {
         alert('Logged In Successfully');
-        this.props.toggleLoginState(this.state.username);
+        this.setState({
+          firstName: res.data.user.firstName,
+          lastName: res.data.user.lastName,
+          username: res.data.user.username,
+          password: res.data.user.password,
+          email: res.data.user.email
+        });
+        localStorage.setItem('secretKey', res.data.token);
+        this.props.toggleLoginState(this.state);
         this.setState({
           firstName: '',
           lastName: '',

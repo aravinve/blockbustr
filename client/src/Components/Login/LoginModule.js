@@ -1,20 +1,24 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 import axios from 'axios';
 import Login from './Login';
 import Register from './Register';
 import Forgot from './Forgot';
 
 class LoginModule extends Component {
-  state = {
-    isShowLogin: true,
-    isShowRegister: false,
-    isShowForgot: false,
-    username: '',
-    password: '',
-    firstName: '',
-    lastName: '',
-    email: ''
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isShowLogin: true,
+      isShowRegister: false,
+      isShowForgot: false,
+      username: '',
+      password: '',
+      firstName: '',
+      lastName: '',
+      email: ''
+    };
+  }
 
   toggleShowForgot = () => {
     this.setState({
@@ -80,7 +84,10 @@ class LoginModule extends Component {
           email: res.data.user.email
         });
         localStorage.setItem('secretKey', res.data.token);
-        this.props.toggleLoginState(this.state);
+        localStorage.setItem('userData', JSON.stringify(this.state));
+        localStorage.setItem('isLoggedIn', res.data.success);
+        this.props.setUserdata(this.state, res.data.success);
+        this.props.history.push('/');
         this.setState({
           firstName: '',
           lastName: '',
@@ -123,4 +130,4 @@ class LoginModule extends Component {
   }
 }
 
-export default LoginModule;
+export default withRouter(LoginModule);

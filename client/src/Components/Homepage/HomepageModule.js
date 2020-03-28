@@ -22,16 +22,35 @@ class HomepageModule extends Component {
         this.setState({ message: res.data.message });
       });
   };
+
   render() {
     return (
-      <div>
-        <button className='btn btn-outline-secondary'>Logout</button>
-        <h1>Welcome to Blockbustr, {this.props.user.userName}</h1>
-        <a href={this.props.user.firstName}>
-          Click here to claim free movie coupon!!
-        </a>
-        <button onClick={this.performPost}>Post Now</button>
-        {this.state.message}
+      <div className='container m-auto'>
+        <div className='row'>
+          <button
+            className='btn btn-outline-dark mb-3 mt-3'
+            onClick={this.props.logout}
+          >
+            Logout
+          </button>
+        </div>
+        <div className='row'>
+          <h1>Welcome to Blockbustr, {this.props.user.username}</h1>
+        </div>
+        <div className='row'>
+          <a className='blockquote' href={this.props.user.firstName}>
+            Click here to claim free movie coupon!!
+          </a>
+        </div>
+        <div className='row'>
+          <button
+            className='btn btn-outline-dark mt-3 mb-3 btn-block'
+            onClick={this.performPost}
+          >
+            Post Now
+          </button>
+        </div>
+        <div className='row'>{this.state.message}</div>
       </div>
     );
   }

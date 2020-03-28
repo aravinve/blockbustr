@@ -3,29 +3,67 @@ import './App.css';
 import LoginModule from './Components/Login/LoginModule';
 import Navbar from './Components/Header/Navbar';
 import HomepageModule from './Components/Homepage/HomepageModule';
-import { BrowserRouter, Route, Link } from 'react-router-dom';
+import ErrorComponent from './Components/ErrorComponent/ErrorComponent';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      login: false,
-      user: ''
+      user: {},
+      isLoggedIn: false
     };
   }
 
-  toggleLoginState = user => {
-    this.setState({ login: !this.state.login, user: user });
+  componentDidMount() {
+    const data =
+      localStorage.getItem('userData') !== null
+        ? JSON.parse(localStorage.getItem('userData'))
+        : '';
+    const status =
+      localStorage.getItem('isLoggedIn') !== null
+        ? localStorage.getItem('isLoggedIn')
+        : false;
+    this.setUserdata(data, status);
+  }
+
+  setUserdata = (userData, isLoggedIn) => {
+    this.setState({ user: userData, isLoggedIn: isLoggedIn });
   };
+
+  logout = () => {
+    this.setState({ isLoggedIn: false, user: {} });
+    localStorage.clear();
+  };
+
   render() {
     return (
       <div className='App'>
         <Navbar />
-        {this.state.login ? (
-          <HomepageModule user={this.state.user} />
-        ) : (
-          <LoginModule toggleLoginState={this.toggleLoginState} />
-        )}
+        <BrowserRouter>
+          <Switch>
+            <Route
+              exact
+              path='/'
+              render={() => {
+                if (
+                  this.state.isLoggedIn ||
+                  localStorage.getItem('isLoggedIn')
+                ) {
+                  return (
+                    <HomepageModule
+                      user={this.state.user}
+                      logout={this.logout}
+                    />
+                  );
+                } else {
+                  return <LoginModule setUserdata={this.setUserdata} />;
+                }
+              }}
+            />
+            <Route path='*' component={ErrorComponent} />} />
+          </Switch>
+        </BrowserRouter>
       </div>
     );
   }

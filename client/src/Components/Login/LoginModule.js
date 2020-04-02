@@ -4,6 +4,7 @@ import axios from 'axios';
 import Login from './Login';
 import Register from './Register';
 import Forgot from './Forgot';
+import Reset from './Reset';
 
 class LoginModule extends Component {
   constructor(props) {
@@ -12,6 +13,7 @@ class LoginModule extends Component {
       isShowLogin: true,
       isShowRegister: false,
       isShowForgot: false,
+	  isShowReset: false,
       username: '',
       password: '',
       firstName: '',
@@ -19,19 +21,28 @@ class LoginModule extends Component {
       email: ''
     };
   }
-
   toggleShowForgot = () => {
     this.setState({
       isShowForgot: !this.state.isShowForgot,
       isShowLogin: !this.state.isShowLogin,
-      isShowRegister: false
+      isShowRegister: false,
+	  isShowReset: false
     });
   };
   toggleShowRegister = () => {
     this.setState({
       isShowForgot: false,
+	  isShowReset: false,
       isShowLogin: !this.state.isShowLogin,
       isShowRegister: !this.state.isShowRegister
+    });
+  };
+  toggleShowReset = () => {
+    this.setState({
+      isShowForgot: !this.state.isShowForgot,
+	  isShowReset: !this.state.isShowReset,
+      isShowLogin: false,
+      isShowRegister: false
     });
   };
   registerUser = e => {
@@ -57,6 +68,26 @@ class LoginModule extends Component {
       }
     });
   };
+  
+  performResetPassword = e => {
+    e.preventDefault();
+    const payLoad = {
+	  username: this.state.username,
+      password: this.state.password
+    };
+    axios.post('/API/resetPassword', payLoad).then(res => {
+      if (res.data.success) {
+		alert('Password Changed Successfully');
+        this.setState({
+		  isShowLogin: true,
+		  isShowRegister: false,
+		  isShowForgot: false,
+		  isShowReset: false
+        });
+      }
+    });
+  };
+
   handleComponentChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -98,6 +129,25 @@ class LoginModule extends Component {
       }
     });
   };
+  //validate the user who want to reset his/her password 
+  validateForgotPasswordUser = event => {
+    event.preventDefault();
+    const payLoad = {
+      username: this.state.username
+    };
+    axios.post('/API/forgotPassword', payLoad).then(res => {
+      if (res.data.success) {
+        alert('Please enter your new password');
+        this.setState({
+		  isShowLogin: false,
+		  isShowRegister: false,
+		  isShowForgot: false,
+		  isShowReset: true
+        });
+		//localStorage.setItem('userData', JSON.stringify(this.state));
+      }
+    });
+  };
   render() {
     return (
       <React.Fragment>
@@ -120,7 +170,19 @@ class LoginModule extends Component {
               />
             ) : null}
             {this.state.isShowForgot ? (
-              <Forgot hideForgot={this.toggleShowForgot} />
+              <Forgot 
+			    hideForgot={this.toggleShowForgot}	
+			    validateForgotPasswordUser={this.validateForgotPasswordUser}
+			    handleComponentChange={this.handleComponentChange}
+			  />
+            ) : null}
+            {this.state.isShowReset ? (
+              <Reset
+                hideReset={this.toggleShowReset}
+                performResetPassword={this.performResetPassword}
+                handleComponentChange={this.handleComponentChange}
+                validatePassword={this.validatePassword}
+              />
             ) : null}
           </div>
           <div className='col-6'></div>

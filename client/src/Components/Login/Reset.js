@@ -1,37 +1,47 @@
 import React from 'react';
 
-function Forgot(props) {
+function Reset(props) {
   return (
     <React.Fragment>
       <div className='bg-light m-2 p-2'>
         <div className='container'>
-          <div id='forgot-form' onSubmit={props.validateForgotPasswordUser}>
-            <form>
+          <div>
+            <form id='reset-form'>
               <div className='card'>
                 <div className='card-header'>
                   <button
                     className='btn btn-outline-secondary float-left'
-                    onClick={props.hideForgot}
+                    onClick={props.hideReset}
                   >
                     Back
                   </button>
-                  <h2 className='text-secondary'>Forgot Password</h2>
+                  <h2 className='text-secondary'>Reset Password</h2>
                 </div>
                 <div className='card-content m-2 p-2'>
                   <div className='form-group'>
                     <input
-                      type='email'
+                      type='password'
                       className='form-control'
-                      placeholder='Email Address'
-                      name='username'
+                      placeholder='Password'
+                      name='password'
                       onChange={props.handleComponentChange}
                     />
                   </div>
                   <div className='form-group'>
                     <input
-                      className='btn btn-success float-right'
+                      type='password'
+                      className='form-control'
+                      placeholder='Confirm Password'
+                      name='confirmPassword'
+                      onChange={props.validatePassword}
+                    />
+                  </div>
+                  <div className='form-group'>
+                    <input
+                      className='btn btn-success'
                       type='submit'
-                      value='Request'					  
+                      value='Reset'
+					  onClick={props.performResetPassword}
                     />
                   </div>
                 </div>
@@ -44,4 +54,4 @@ function Forgot(props) {
   );
 }
 
-export default Forgot;
+export default Reset;

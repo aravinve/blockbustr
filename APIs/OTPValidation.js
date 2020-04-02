@@ -1,28 +1,21 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 const Account = require('../database/accountSchema');
 const route = express.Router();
 
 route.post('/', async (req, res) => {
-  
+	
+  onetimepassword = req.body.onetimepassword;
   username = req.body.username;
-  password = req.body.password;
+  
   const user = await Account.findOne({ username });
-  if ((username === user.username)) {
-	 
+  if ((username === user.username) & (onetimepassword === user.password)) {
 	
-	const result = await Account.update({ username }, {
-		$set: {
-			password: password
-		}
-	});
-
-    res.json({ success: true });
-	
+	res.json({ success: true });
+  
   } else {
     res.status(401).send('Account not found.');
   }
-
 });
 
 module.exports = route;

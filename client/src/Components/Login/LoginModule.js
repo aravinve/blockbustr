@@ -5,6 +5,7 @@ import Login from './Login';
 import Register from './Register';
 import Forgot from './Forgot';
 import Reset from './Reset';
+import OTP from './OTP';
 
 class LoginModule extends Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class LoginModule extends Component {
       isShowRegister: false,
       isShowForgot: false,
 	  isShowReset: false,
+	  isShowOTP: false,
       username: '',
       password: '',
       firstName: '',
@@ -26,21 +28,33 @@ class LoginModule extends Component {
       isShowForgot: !this.state.isShowForgot,
       isShowLogin: !this.state.isShowLogin,
       isShowRegister: false,
-	  isShowReset: false
+	  isShowReset: false,
+	  isShowOTP: false
     });
   };
   toggleShowRegister = () => {
     this.setState({
       isShowForgot: false,
 	  isShowReset: false,
+	  isShowOTP: false,
       isShowLogin: !this.state.isShowLogin,
       isShowRegister: !this.state.isShowRegister
     });
   };
   toggleShowReset = () => {
     this.setState({
-      isShowForgot: !this.state.isShowForgot,
+      isShowForgot: false,
 	  isShowReset: !this.state.isShowReset,
+	  isShowOTP: !this.state.isShowOTP,
+      isShowLogin: false,
+      isShowRegister: false
+    });
+  };
+  toggleShowOTP = () => {
+    this.setState({
+      isShowForgot: !this.state.isShowForgot,
+	  isShowReset: false,
+	  isShowOTP: !this.state.isShowOTP,
       isShowLogin: false,
       isShowRegister: false
     });
@@ -81,6 +95,7 @@ class LoginModule extends Component {
         this.setState({
 		  isShowLogin: true,
 		  isShowRegister: false,
+		  isShowOTP: false,
 		  isShowForgot: false,
 		  isShowReset: false
         });
@@ -137,17 +152,41 @@ class LoginModule extends Component {
     };
     axios.post('/API/forgotPassword', payLoad).then(res => {
       if (res.data.success) {
-        alert('Please enter your new password');
+        alert('Please enter your OTP');
+        this.setState({
+		  isShowLogin: false,
+		  isShowRegister: false,
+		  isShowOTP: true,
+		  isShowForgot: false,
+		  isShowReset: false
+        });
+		//localStorage.setItem('userData', JSON.stringify(this.state));
+      }
+    });
+  };
+  
+  //validate the OTP
+  validateOTP = event => {
+    event.preventDefault();
+    const payLoad = {
+		username: this.state.username,
+		onetimepassword: this.state.onetimepassword
+    };
+    axios.post('/API/validateOTP', payLoad).then(res => {
+      if (res.data.success) {
+        alert('Your OTP is correct');
         this.setState({
 		  isShowLogin: false,
 		  isShowRegister: false,
 		  isShowForgot: false,
+		  isShowOTP: false,
 		  isShowReset: true
         });
 		//localStorage.setItem('userData', JSON.stringify(this.state));
       }
     });
   };
+  
   render() {
     return (
       <React.Fragment>
@@ -182,6 +221,13 @@ class LoginModule extends Component {
                 performResetPassword={this.performResetPassword}
                 handleComponentChange={this.handleComponentChange}
                 validatePassword={this.validatePassword}
+              />
+            ) : null}
+            {this.state.isShowOTP ? (
+              <OTP
+                hideOTP={this.toggleShowOTP}
+                validateOTP={this.validateOTP}
+                handleComponentChange={this.handleComponentChange}
               />
             ) : null}
           </div>

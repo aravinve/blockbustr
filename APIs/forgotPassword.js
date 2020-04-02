@@ -2,42 +2,59 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const Account = require('../database/accountSchema');
 const route = express.Router();
+const nodemailer = require('nodemailer');
+
+function OTPgeneration(length) {
+   var generatedOTP     = '';
+   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+   var charactersLength = characters.length;
+   for ( var i = 0; i < length; i++ ) {
+      generatedOTP += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+   return generatedOTP;
+}
 
 route.post('/', async (req, res) => {
   username = req.body.username;
   const user = await Account.findOne({ username });
+  
   if ((username === user.username)) {
-    jwt.sign({ user }, 'secretkey', (err, token) => {
-      res.json({ user: user, success: true, token: token });
-    });
+	//OTP generation
+	onetimepassword = OTPgeneration(6);
+	var transporter = nodemailer.createTransport({
+	  service: 'gmail',
+	  auth: {
+		user: 'blockbustrgang@gmail.com',
+		pass: 'wolfgang@01'
+	  }
+	});
+
+	var mailOptions = {
+	  from: 'blockbustrgang@gmail.com',
+	  to: username,
+	  subject: 'Blockbustr\'s Password Reset',
+	  text: 'We have received a request to reset your password for your Blockbustr account! Your OTP is ' + onetimepassword
+	};
+
+	transporter.sendMail(mailOptions, function(error, info){
+	  if (error) {
+		console.log(error);
+	  } else {
+		console.log('Email sent: ' + info.response);
+	  }
+	});
+	
+	const result = await Account.update({ username }, {
+		$set: {
+			password: onetimepassword
+		}
+	});
+	
+	res.json({ success: true });
+  
   } else {
     res.status(401).send('Account not found.');
   }
 });
-
-route.post('/post', verifyToken, async (req, res) => {
-  jwt.verify(req.token, 'secretkey', (err, authData) => {
-    if (err) {
-      res.sendStatus(403);
-    } else {
-      res.json({
-        message: 'Post Created',
-        authData
-      });
-    }
-  });
-});
-
-function verifyToken(req, res, next) {
-  const clientHeader = req.headers['authorization'];
-  if (typeof clientHeader != 'undefined') {
-    const clientHeaderArray = clientHeader.split(' ');
-    const authToken = clientHeaderArray[1];
-    req.token = authToken;
-    next();
-  } else {
-    res.sendStatus(403);
-  }
-}
 
 module.exports = route;

@@ -28,3 +28,4 @@ app.use('/API/addAccount', require('./APIs/accountRoute'));
 app.use('/API/validateUser', require('./APIs/authenticateUser'));
 app.use('/API/forgotPassword', require('./APIs/forgotPassword'));
 app.use('/API/resetPassword', require('./APIs/resetPassword'));
+app.use('/API/validateOTP', require('./APIs/OTPValidation'));

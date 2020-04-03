@@ -16,11 +16,21 @@ function OTPgeneration(length) {
 }
 
 route.post('/', async (req, res) => {
-
+	
   username = req.body.username;
+  
+  const existingOtpUser = await OTPassword.findOne({ username });
   const user = await Account.findOne({ username });
   
+  //remove existing OTP in database
+  if (existingOtpUser) {
+	
+	await OTPassword.remove({ username });
+
+	};
+  
   if ((username === user.username)) {
+	 
 	//OTP generation
 	onetimepassword = OTPgeneration(6);
 	

@@ -1,10 +1,15 @@
 import React from 'react';
 import Logo from './Logo';
+import Searchbar from './Searchbar';
 
-function Navbar() {
+function Navbar(props) {
   return (
-    <nav className='navbar navbar-expand-lg navbar-light bg-success'>
+    <nav className='navbar navbar-expand-lg navbar-light bg-success justify-content-between'>
       <Logo />
+      <Searchbar
+        searchTerm={props.searchTerm}
+        handleComponentChange={props.handleComponentChange}
+      />
     </nav>
   );
 }

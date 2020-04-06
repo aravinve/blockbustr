@@ -14,7 +14,7 @@ mongoose
   .then(() => {
     console.log('Mongo Cluster Connected Successfully');
   })
-  .catch(err => {
+  .catch((err) => {
     console.log(err);
   });
 // PORT
@@ -29,3 +29,4 @@ app.use('/API/validateUser', require('./APIs/authenticateUser'));
 app.use('/API/forgotPassword', require('./APIs/forgotPassword'));
 app.use('/API/resetPassword', require('./APIs/resetPassword'));
 app.use('/API/validateOTP', require('./APIs/OTPValidation'));
+app.use('/API/search', require('./APIs/search'));

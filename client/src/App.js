@@ -4,6 +4,7 @@ import LoginModule from './Components/Login/LoginModule';
 import Navbar from './Components/Header/Navbar';
 import HomepageModule from './Components/Homepage/HomepageModule';
 import ErrorComponent from './Components/ErrorComponent/ErrorComponent';
+import MovieList from './Components/MovieList/MovieList';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 class App extends React.Component {
@@ -11,7 +12,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       user: {},
-      isLoggedIn: false
+      isLoggedIn: false,
+      search: '',
     };
   }
 
@@ -36,10 +38,17 @@ class App extends React.Component {
     localStorage.clear();
   };
 
+  handleComponentChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
   render() {
     return (
       <div className='App'>
-        <Navbar />
+        <Navbar
+          searchTerm={this.state.search}
+          handleComponentChange={this.handleComponentChange}
+        />
         <BrowserRouter>
           <Switch>
             <Route
@@ -61,6 +70,7 @@ class App extends React.Component {
                 }
               }}
             />
+            <Route path='/API/search/*' component={MovieList} />
             <Route path='*' component={ErrorComponent} />} />
           </Switch>
         </BrowserRouter>

@@ -3,7 +3,9 @@ import React from 'react';
 function Logo() {
   return (
     <React.Fragment>
-      <h2 className='text-white display-4'>Blockbustr</h2>
+      <a href='/' className='text-white nav-link display-4 mb-2'>
+        Blockbustr
+      </a>
     </React.Fragment>
   );
 }

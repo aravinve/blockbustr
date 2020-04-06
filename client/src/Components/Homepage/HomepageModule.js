@@ -5,19 +5,19 @@ class HomepageModule extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      message: ''
+      message: '',
     };
   }
 
   performPost = () => {
     const headers = {
       'Content-type': 'application/json',
-      Authorization: 'Client ' + localStorage.getItem('secretKey')
+      Authorization: 'Client ' + localStorage.getItem('secretKey'),
     };
     const data = this.props.user;
     axios
       .post('/API/validateUser/post', data, { headers: headers })
-      .then(res => {
+      .then((res) => {
         console.log(res.data);
         this.setState({ message: res.data.message });
       });

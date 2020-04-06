@@ -29,6 +29,21 @@ route.post('/post', verifyToken, async (req, res) => {
   });
 });
 
+route.get('/getcredits', verifyToken, async (req, res) => {
+
+  jwt.verify(req.token, 'secretkey', (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      const name = req.query.name
+
+      res.json({
+        credits: '30',
+        name:name
+      });
+    }
+  });
+});
 function verifyToken(req, res, next) {
   const clientHeader = req.headers['authorization'];
   if (typeof clientHeader != 'undefined') {

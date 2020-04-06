@@ -6,6 +6,7 @@ import HomepageModule from './Components/Homepage/HomepageModule';
 import ErrorComponent from './Components/ErrorComponent/ErrorComponent';
 import MovieList from './Components/MovieList/MovieList';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import ShowCredits from './Components/Homepage/ShowCredits';
 
 class App extends React.Component {
   constructor(props) {
@@ -71,7 +72,9 @@ class App extends React.Component {
               }}
             />
             <Route path='/API/search/*' component={MovieList} />
-            <Route path='*' component={ErrorComponent} />} />
+            {/*<Route path='*' component={ErrorComponent} />} /> */}
+            <Route path="/showcredits/:name?" component={ShowCredits} />
+
           </Switch>
         </BrowserRouter>
       </div>

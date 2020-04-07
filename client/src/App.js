@@ -91,7 +91,7 @@ class App extends React.Component {
               path='/API/search*'
               render={() => <MovieList movieList={this.state.movieList} />}
             />
-            <Route path='*' component={ErrorComponent} />} />
+            {/*<Route path='*' component={ErrorComponent} />} />*/}
             <Route path='/showcredits/:name?' component={ShowCredits} />
           </Switch>
           {redirect}

@@ -27,6 +27,7 @@ function Forgot(props) {
                       onChange={props.handleComponentChange}
                     />
                   </div>
+				  
                   <div className='form-group'>
                     <input
                       className='btn btn-success float-right'

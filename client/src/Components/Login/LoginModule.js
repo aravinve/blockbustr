@@ -161,7 +161,18 @@ class LoginModule extends Component {
           isShowReset: false,
         });
         //localStorage.setItem('userData', JSON.stringify(this.state));
-      }
+      }else{
+		  
+		alert("No record found, please re-enter your email address!");
+        this.setState({
+          isShowLogin: false,
+          isShowRegister: false,
+          isShowOTP: true,
+          isShowForgot: false,
+          isShowReset: false,
+        });
+	    
+	  }
     });
   };
 

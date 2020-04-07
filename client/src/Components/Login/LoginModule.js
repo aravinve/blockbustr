@@ -141,7 +141,18 @@ class LoginModule extends Component {
           password: '',
           email: '',
         });
-      }
+      }else{
+		  
+		alert("Invalid username or password!");
+        this.setState({
+          isShowLogin: true,
+          isShowRegister: false,
+          isShowOTP: false,
+          isShowForgot: false,
+          isShowReset: false,
+        });
+	    
+	  }
     });
   };
   //validate the user who want to reset his/her password

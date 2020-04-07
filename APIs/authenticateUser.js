@@ -12,7 +12,7 @@ route.post('/', async (req, res) => {
       res.json({ user: user, success: true, token: token });
     });
   } else {
-    res.status(401).send('Account not found.');
+    res.json({ success: false });
   }
 });
 

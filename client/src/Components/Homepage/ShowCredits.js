@@ -25,10 +25,12 @@ parseQueryString = (string) => {
 
  render() {
     const nameParam=this.parseQueryString(this.props.location.search).name.toUpperCase();
+    const creditParam=this.parseQueryString(this.props.location.search).credits;
+
     return (
       <div>
         <h3>Hi <b>{nameParam}</b></h3>
-        <h4> Thank you for recommending us to your friend .Here is your 30 Free Movie Credits !!!</h4>
+        <h4> Thank you for recommending us to your friend .Here is your {creditParam} Free Movie Credits !!!</h4>
         <img src={ require('./credit.jpeg') } />
 
       </div>

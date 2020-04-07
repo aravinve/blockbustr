@@ -92,7 +92,7 @@ class App extends React.Component {
               render={() => <MovieList movieList={this.state.movieList} />}
             />
             {/*<Route path='*' component={ErrorComponent} />} />*/}
-            <Route path='/showcredits/:name?' component={ShowCredits} />
+            <Route path='/showcredits/:credits?' component={ShowCredits} />
           </Switch>
           {redirect}
         </BrowserRouter>

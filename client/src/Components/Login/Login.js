@@ -1,8 +1,8 @@
 import React from 'react';
-function Login (props)  {
+function Login(props) {
   return (
     <React.Fragment>
-      <div className='bg-light m-2 p-2'>
+      <div className='m-2 p-2'>
         <div className='container'>
           <div id='login-form'>
             <form>

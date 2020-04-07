@@ -41,7 +41,7 @@ function Reset(props) {
                       className='btn btn-success'
                       type='submit'
                       value='Reset'
-					  onClick={props.performResetPassword}
+                      onClick={props.performResetPassword}
                     />
                   </div>
                 </div>

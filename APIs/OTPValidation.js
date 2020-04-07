@@ -16,7 +16,7 @@ route.post('/', async (req, res) => {
 	res.json({ success: true });
   
   } else {
-    res.status(401).send('Account not found.');
+    res.json({ success: false });
   }
 });
 

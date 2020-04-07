@@ -99,7 +99,7 @@ class LoginModule extends Component {
             isShowForgot: false,
             isShowReset: false,
           });
-        }
+        }else if (!res.data.success) {alert(res.data.message);}
       });
   };
 
@@ -205,7 +205,18 @@ class LoginModule extends Component {
           isShowReset: true,
         });
         //localStorage.setItem('userData', JSON.stringify(this.state));
-      }
+      }else{
+		  
+		alert("Incorrect OTP!");
+        this.setState({
+          isShowLogin: false,
+          isShowRegister: false,
+          isShowOTP: true,
+          isShowForgot: false,
+          isShowReset: false,
+        });
+	    
+	  }	  	  	  
     });
   };
 

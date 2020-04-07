@@ -27,11 +27,7 @@ route.post('/', async (req, res) => {
 	
 	await OTPassword.remove({ username });
 
-	}else {
-		
-    res.json({ success: false });
-	
-  }
+	}
   
   if ((username === user.username)) {
 	 

@@ -36,9 +36,10 @@ route.get('/getcredits', verifyToken, async (req, res) => {
       res.sendStatus(403);
     } else {
       const name = req.query.name
+      const credits = req.query.credits
 
       res.json({
-        credits: '30',
+        credits:credits ,
         name:name
       });
     }

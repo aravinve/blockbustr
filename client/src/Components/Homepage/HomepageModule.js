@@ -8,7 +8,7 @@ class HomepageModule extends Component {
     this.state = {
       message: '',
       sendername: '',
-      senderemail: '',
+      credits: 30,
       redirect: null,
     };
   }
@@ -47,14 +47,13 @@ class HomepageModule extends Component {
       .get('/API/validateUser/getcredits', {
         headers: headers,
         params: {
-          name: this.state.sendername,
-          email: this.state.senderemail,
+          credits: this.state.credits,
+          name: this.state.sendername
         },
       })
       .then((res) => {
         console.log(res.data.name);
-        //this.setState({ redirect: '/showcredits?name=${res.data.name}'});
-        window.location = '/showcredits?name=' + res.data.name;
+        window.location = '/showcredits?credits=' + res.data.credits + '&name=' +res.data.name;
       });
   };
   render() {

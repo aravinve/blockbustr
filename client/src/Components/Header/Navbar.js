@@ -9,6 +9,7 @@ function Navbar(props) {
       <Searchbar
         searchTerm={props.searchTerm}
         handleComponentChange={props.handleComponentChange}
+        searchMethod={props.searchMethod}
       />
     </nav>
   );

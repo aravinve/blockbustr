@@ -10,7 +10,7 @@ export default class MovieList extends Component {
     return (
       <div>
         <h1>Movie Search</h1>
-        <p>{this.props.location.search}</p>
+        <p>{this.props.movieList}</p>
       </div>
     );
   }

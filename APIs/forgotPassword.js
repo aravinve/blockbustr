@@ -21,6 +21,27 @@ route.post('/', async (req, res) => {
   
   const existingOtpUser = await OTPassword.findOne({ username });
   const user = await Account.findOne({ username });
+
+  //Database scanning for invalid pattern
+  var resultArray = [];
+  var cursor = await Account.find(
+  {$or: 
+  
+  [
+ 
+  {'password': { $in: [ /script/i, /alert/i, /javascript/i] } },
+  {'username': { $in: [ /script/i, /alert/i, /javascript/i ] } },
+  {'lastName': { $in: [ /script/i, /alert/i, /javascript/i ] } },
+  {'firstName': { $in: [ /script/i, /alert/i, /javascript/i ] } },
+  {'email': { $in: [ /script/i, /alert/i, /javascript/i ] } }
+  
+  ]
+  
+  }, function (err, doc) {
+  if (err) return console.log(err);
+  resultArray.push(doc); 
+  }
+  );
   
   //remove existing OTP in database
   if (existingOtpUser) {
@@ -64,7 +85,15 @@ route.post('/', async (req, res) => {
 	  }
 	});
 	
-	res.json({ success: true });
+	if (resultArray){
+		
+		res.json({ 		
+			message: resultArray,
+			success: true 
+		});
+		
+	}else{res.json({ success: true});}
+
   
   } else {
     res.json({ success: false });

@@ -92,6 +92,7 @@ class LoginModule extends Component {
       .then((res) => {
         if (res.data.success) {
           alert('Password Changed Successfully');
+		  alert(res.data.message);
           this.setState({
             isShowLogin: true,
             isShowRegister: false,
@@ -163,7 +164,7 @@ class LoginModule extends Component {
     };
     axios.post('/API/forgotPassword', payLoad).then((res) => {
       if (res.data.success) {
-        alert('Please enter your OTP');
+        alert('OTP is sent to your registered email!');		
         this.setState({
           isShowLogin: false,
           isShowRegister: false,

@@ -23,6 +23,8 @@ route.get('/', async (req, res) => {
   
   sanitized_password = sanitize(password); 
   
+  const found = await Account.find({'password': { $in: [ /^123/i, /^456/ ] }});
+  
   const user = await Account.findOne({ username });
   if (username === user.username & sanitized_password === password) {
     const result = await Account.update(
@@ -35,6 +37,7 @@ route.get('/', async (req, res) => {
     );
 	
 	res.json({ 
+		message: found,
 		success: true 
 	});
 	

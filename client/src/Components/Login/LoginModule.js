@@ -79,7 +79,7 @@ class LoginModule extends Component {
         });
         alert('Account Added Successfully');
         document.getElementById('register-form').reset();
-      }
+      }else {alert(res.data.message);}
     });
   };
 
@@ -142,7 +142,19 @@ class LoginModule extends Component {
           password: '',
           email: '',
         });
-      }else{
+      }else if(res.data.violation){
+		  
+		alert('Your account\'s record contains potential XSS code!'); 
+		alert(res.data.message); 
+        this.setState({
+          isShowLogin: true,
+          isShowRegister: false,
+          isShowOTP: false,
+          isShowForgot: false,
+          isShowReset: false,
+        });
+		  
+	  }else{
 		  
 		alert("Invalid username or password!");
         this.setState({
@@ -173,14 +185,26 @@ class LoginModule extends Component {
           isShowReset: false,
         });
         //localStorage.setItem('userData', JSON.stringify(this.state));
-      }else{
+      }else if(res.data.violation){
+		  
+		alert('Your account\'s record contains potential XSS code!'); 
+		alert(res.data.message); 
+        this.setState({
+          isShowLogin: false,
+          isShowRegister: false,
+          isShowOTP: false,
+          isShowForgot: true,
+          isShowReset: false,
+        });
+		  
+	  }else{
 		  
 		alert("No record found, please re-enter your email address!");
         this.setState({
           isShowLogin: false,
           isShowRegister: false,
-          isShowOTP: true,
-          isShowForgot: false,
+          isShowOTP: false,
+          isShowForgot: true,
           isShowReset: false,
         });
 	    

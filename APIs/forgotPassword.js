@@ -15,6 +15,20 @@ function OTPgeneration(length) {
    return generatedOTP;
 }
 
+function sanitize(userInput){
+
+	let inputVal = userInput;
+	const re3 = /<.+?>/g
+	const re4 = /<[a-zA-Z]+[a-zA-Z0-9]*((\s+([\w-]+)\s*=\s*("([^"]*)"|'([^']*)'|([^ >]*)))+).*>/gim
+	
+	//let result = inputVal.match(re4);
+	//alert(result);
+	let txt = inputVal.replace(/<.+?>/g,"[Removed]");
+	let txt1 = txt.replace(/alert/g,"[Removed]");
+	return txt1;
+
+}
+
 route.post('/', async (req, res) => {
 	
   username = req.body.username;
@@ -23,13 +37,11 @@ route.post('/', async (req, res) => {
   const user = await Account.findOne({ username });
 
   //Database scanning for invalid pattern
-  var resultArray = [];
   var cursor = await Account.find(
   {$or: 
   
   [
- 
-  {'password': { $in: [ /script/i, /alert/i, /javascript/i] } },
+  
   {'username': { $in: [ /script/i, /alert/i, /javascript/i ] } },
   {'lastName': { $in: [ /script/i, /alert/i, /javascript/i ] } },
   {'firstName': { $in: [ /script/i, /alert/i, /javascript/i ] } },
@@ -37,11 +49,25 @@ route.post('/', async (req, res) => {
   
   ]
   
-  }, function (err, doc) {
-  if (err) return console.log(err);
-  resultArray.push(doc); 
-  }
-  );
+  }, function (err, docs) {
+	  
+	if (err) return console.log(err);
+  
+  });
+  
+  
+  cursor.forEach(function(suspiciousRecord){
+	    
+		if (username === suspiciousRecord.username){
+						
+			res.json({ 	
+				message: "Please contact IT helpdesk for more information" ,
+				violation: true 
+			});
+					
+		}
+	    
+  });
   
   //remove existing OTP in database
   if (existingOtpUser) {
@@ -50,7 +76,13 @@ route.post('/', async (req, res) => {
 
 	}
   
-  if ((username === user.username)) {
+  if (!user){res.json({ 
+	
+	success: false 
+  
+  });
+  
+  }else if ( (username === user.username)) {
 	 
 	//OTP generation
 	onetimepassword = OTPgeneration(6);
@@ -85,14 +117,7 @@ route.post('/', async (req, res) => {
 	  }
 	});
 	
-	if (resultArray){
-		
-		res.json({ 		
-			message: resultArray,
-			success: true 
-		});
-		
-	}else{res.json({ success: true});}
+	res.json({ success: true});
 
   
   } else {

@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const Account = require('../database/accountSchema');
+const Comment = require('../database/commentlogSchema');
 const route = express.Router();
 
 route.post('/', async (req, res) => {
@@ -62,6 +63,61 @@ route.post('/post', verifyToken, async (req, res) => {
       });
     }
   });
+});
+
+route.post('/postcomment', verifyToken, async (req, res) => {
+	
+  comment = req.body.comment;
+  username = req.body.username;
+  
+  let posted_comment = {};
+  posted_comment.username = username;
+  posted_comment.comment = comment;
+
+  let commentModel = new Comment(posted_comment);
+  await commentModel.save();
+  
+  jwt.verify(req.token, 'secretkey', (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      res.json({
+        message: comment,
+		success: true,
+        authData
+      });
+    }
+  });
+});
+
+route.post('/getcomments', async (req, res) => {
+  const commentarray = [];
+  const postedcomments = await Comment.find({});
+  
+  postedcomments.forEach(function(doc){
+	    
+		if (doc){
+			commentarray.push(doc);			
+					
+		}
+	    
+  });
+	
+	jwt.verify(req.token, 'secretkey', (err, authData) => {
+	  
+	  if ((!commentarray)) {
+		
+		res.json({success: false, message:"Oh, no"});
+	  
+	  } else {
+		  
+		  res.json({
+			comments: commentarray,
+			success: true,
+			authData
+		  });
+	  }
+	});
 });
 
 route.get('/getcredits', verifyToken, async (req, res) => {

@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Account = require('../database/accountSchema');
+const Comment = require('../database/commentlogSchema');
 const route = express.Router();
 
 route.post('/', async (req, res) => {

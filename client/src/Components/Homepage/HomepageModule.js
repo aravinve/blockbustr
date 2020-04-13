@@ -148,12 +148,12 @@ class HomepageModule extends Component {
         </div>
         <div className='row mt-4'>
           <div className='col-4'>
-            <div className='row'>
-              <h4>Transfer Movie Credits</h4>
+            <div className='row' style={{ justifyContent: 'center' }}>
+              <h4>Invite Friends, Earn 30 Credits</h4>
             </div>
             <form>
               <div className='form-group'>
-                <label>Name</label>
+                <label>Your Friend's Name</label>
                 <input
                   type='text'
                   name='sendername'
@@ -165,7 +165,7 @@ class HomepageModule extends Component {
                 />
               </div>
               <div className='form-group'>
-                <label>Email</label>
+                <label>Your Friend's Email</label>
                 <input
                   type='email'
                   name='senderemail'
@@ -186,7 +186,7 @@ class HomepageModule extends Component {
           </div>
           <div className='col-6 m-auto'>
             <div className='row'>
-              <h4>Kindly leave your thoughts below:</h4>
+              <h4>Kindly Leave your Thoughts Below:</h4>
             </div>
             <div className='row'>
               <br />

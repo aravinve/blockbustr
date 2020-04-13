@@ -15,7 +15,6 @@ class HomepageModule extends Component {
       credits: 30,
       redirect: null,
     };
-
     this.getComments();
   }
 
@@ -89,13 +88,11 @@ class HomepageModule extends Component {
       .post('/API/validateUser/getcomments', payLoad, { headers: headers })
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data);
-
           res.data.comments.forEach(function (elem, index) {
             res.data.comments.splice();
             comments.push(elem);
           });
-
+          comments.reverse();
           this.setState({ comments });
         } else {
           alert(res.data.message);
@@ -222,7 +219,7 @@ class HomepageModule extends Component {
               <h5>Comments:</h5>
             </div>
             <div>
-              {this.state.comments.reverse().map(function (comment) {
+              {this.state.comments.map(function (comment) {
                 return (
                   <div className={'row'} key={comment._id}>
                     {comment.username} : {comment.comment}

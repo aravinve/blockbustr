@@ -31,13 +31,12 @@ route.get('/', async (req, res) => {
       { username },
       {
         $set: {
-          password: password,
-        },
+          password: password
+        }
       }
     );
 	
 	res.json({ 
-		message: found,
 		success: true 
 	});
 	

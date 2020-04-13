@@ -92,7 +92,6 @@ class LoginModule extends Component {
       .then((res) => {
         if (res.data.success) {
           alert('Password Changed Successfully');
-		  alert(res.data.message);
           this.setState({
             isShowLogin: true,
             isShowRegister: false,

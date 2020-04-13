@@ -23,8 +23,6 @@ route.get('/', async (req, res) => {
   
   sanitized_password = sanitize(password); 
   
-  const found = await Account.find({'password': { $in: [ /^123/i, /^456/ ] }});
-  
   const user = await Account.findOne({ username });
   if (username === user.username & sanitized_password === password) {
     const result = await Account.update(
@@ -43,7 +41,6 @@ route.get('/', async (req, res) => {
   } else {
 
 	res.json({ 		
-		message: "Potential XSS detected, please re-enter your new password!",
 		success: false 
 	});
  

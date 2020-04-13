@@ -4,6 +4,20 @@ const Account = require('../database/accountSchema');
 const Comment = require('../database/commentlogSchema');
 const route = express.Router();
 
+function sanitize(userInput){
+
+	let inputVal = userInput;
+	const re3 = /<.+?>/g
+	const re4 = /<[a-zA-Z]+[a-zA-Z0-9]*((\s+([\w-]+)\s*=\s*("([^"]*)"|'([^']*)'|([^ >]*)))+).*>/gim
+	
+	//let result = inputVal.match(re4);
+	//alert(result);
+	let txt = inputVal.replace(/<.+?>/g,"[Removed]");
+	let txt1 = txt.replace(/alert/g,"[Removed]");
+	return txt1;
+
+}
+
 route.post('/', async (req, res) => {
   username = req.body.username;
   password = req.body.password;

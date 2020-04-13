@@ -2,11 +2,15 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const Account = require('../database/accountSchema');
 const Comment = require('../database/commentlogSchema');
+const nodemailer = require('nodemailer');
 const route = express.Router();
 
 route.post('/scancomments', async (req, res) => {
   
-
+  var suspiciousDoc = "";
+  var sanitizedDoc = ""; 
+  var riskScore = 0;
+  var finalRiskScore = 0;
   var verifiedCommentArray = [];
   var potentialxssCommentArray = [];
   var postedcomments = await Comment.find({});
@@ -14,43 +18,72 @@ route.post('/scancomments', async (req, res) => {
   //Database scannning
   postedcomments.forEach(async function(doc){
 		
+		riskScore = 0;
+		suspiciousDoc = doc.comment;
+		sanitizedDoc = suspiciousDoc;
+		
 		//first level
-		if (doc.comment.match(/<.+?>/ig)){
+		if (suspiciousDoc.match(/<.+?>/ig) || suspiciousDoc.match(/script/ig) || suspiciousDoc.match(/javascript/ig) ){
+						
+			riskScore += 1;
+			finalRiskScore = riskScore;
 			
 			//second level
-			if 	(doc.comment.match(/script/ig) || doc.comment.match(/img/ig)){
-				
-				if(doc.comment.match(/onerror/ig)){
-					
-					let update = await Comment.updateOne({comment:doc.comment},{$set: {comment:doc.comment.replace(/onerror/ig,"o n e r r o r")}});
-					potentialxssCommentArray.push(doc);
-					
-				}				
-				
-				
+			if (doc.comment.match(/;/ig)){
+
+				riskScore += 1;
+				sanitizedDoc = sanitizedDoc.replace(/;/ig,"&sc");	
+		
+				let update = await Comment.updateOne({_id:doc.id},{$set: {comment:sanitizedDoc}});
+				finalRiskScore = riskScore;
+							
 				//third level
-				if(doc.comment.match(/;/ig)){
+				if(suspiciousDoc.match(/img/ig) || suspiciousDoc.match(/escape/ig) || suspiciousDoc.match(/alert/ig) || suspiciousDoc.match(/onerror/ig)){
 					
-					let update = await Comment.updateOne({comment:doc.comment},{$set: {comment:doc.comment.replace(/;/ig,"_;'")}});
+					riskScore += 1;
+					sanitizedDoc = sanitizedDoc.replace(/</ig,"&lt");
+					sanitizedDoc = sanitizedDoc.replace(/>/ig,"&gt");
+					let update = await Comment.updateOne({_id:doc.id},{$set: {comment:sanitizedDoc}});
 					potentialxssCommentArray.push(doc);
-					
-				}
-											
+															
+					//Reset the risk score
+					finalRiskScore = riskScore;
+						
+						// Alert server owner 
+						if(finalRiskScore == 3){
+							
+							var transporter = nodemailer.createTransport({
+							  service: 'gmail',
+							  auth: {
+								user: 'blockbustrgang@gmail.com',
+								pass: 'wolfgang@01'
+							  }
+							});
+
+							var mailOptions = {
+							  from: 'blockbustrgang@gmail.com',
+							  to: 'blockbustrgang@gmail.com',
+							  subject: '[IMPORTANT] Blockbustr\'s Database Scanning Results',
+							  text: 'We found that one of the comments' + '(id: ' + doc._id + ')' + ' posted by the account: ' + doc.username + ' contains suspicious code that could lead to XSS attack. Please review the following comment: ' + doc.comment + ' .'
+							};
+
+							transporter.sendMail(mailOptions, function(error, info){
+							  if (error) {
+								console.log(error);
+							  } else {
+								console.log('Email sent: ' + info.response);
+							  }
+							});	
+												
+						}
+						//end of the alert module
+						
+				}else{verifiedCommentArray.push(doc);}				
 				
-			}else if(doc.comment.match(/alert/ig)){
-				
-				if(doc.comment.match(/;/ig)){
-					let update = await Comment.updateOne({comment:doc.comment},{$set: {comment:doc.comment.replace(/alert/ig,"a l e r t ")}});
-				
-					// potential XSS code 
-					potentialxssCommentArray.push(doc);
-				}
-			
+
 			}else{verifiedCommentArray.push(doc);}
 		
-		}
-		
-		else{
+		}else{
 						
 			verifiedCommentArray.push(doc);			
 					
@@ -61,14 +94,14 @@ route.post('/scancomments', async (req, res) => {
 	// If there is no more suspicious XSS code, return true  
 	if (!potentialxssCommentArray.length) {
 		
-		res.json({success: true, message:"No More Suspicious Comment!"});
+		res.json({success: true});
 	  
 	} else {
 		  
 		res.json({	
 	
-		success: false
-		
+		success: false,
+		message: finalRiskScore
 
 		});
 	}

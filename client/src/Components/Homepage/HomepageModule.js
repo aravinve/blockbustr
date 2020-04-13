@@ -61,25 +61,27 @@ class HomepageModule extends Component {
     axios
       .post('/API/validateUser/postcomment', payLoad, { headers: headers })
       .then((res) => {
+		  		
         console.log(res.data);
-        this.setState({ message: res.data.message});
+        
       });
 
     // Clear input fields
     event.target.elements.comment.value = ''; 
 	
-	// Update the comments array
-	comments.splice(0,comments.length)
-	this.setState({comments});
-	
 	// Retrieve Comments
 	this.getComments();	
+	
+	// Update the comments array
+	comments.splice(0,comments.length);
+	this.setState({comments});
 	
 	// Force react component render
 	this.setState({ state: this.state });
 
   };
   
+  // get comments from MongoDB table 
   getComments = () =>{
 
 	const payLoad = {
@@ -126,7 +128,7 @@ class HomepageModule extends Component {
     axios.post('/API/scandatabase/scancomments',payLoad, { headers: headers })
       .then((res) => {
 		if (res.data.success){	  
-			
+
 			console.log(res.data);	
 		    this.setState({comments});
 		
@@ -183,14 +185,20 @@ class HomepageModule extends Component {
             Click here to claim free movie coupon!!
           </a>
         </div>
+
+		<div className='row'>
+		
+			<h3>Refer a Friend and get movie credits:</h3>
+		
+		</div>
+		
         <div className='row'>
           <div>
             {/*<a className='blockquote' href="!#">
           Refer a Friend and get movie credits
         </a>*/}
             <form>
-              <div className='form-group'>
-                <label>Name</label>
+              <div className='form-group'>             
                 <input
                   type='text'
                   name='sendername'
@@ -198,11 +206,11 @@ class HomepageModule extends Component {
                   onChange={this.handleComponentChange}
                   className='form-control'
                   id='sendername'
-                  placeholder='Name'
+                  placeholder="Name"
+				  style={{ width: "70vw", justifyContent: 'center' }}
                 />
               </div>
               <div className='form-group'>
-                <label>Email</label>
                 <input
                   type='email'
                   name='senderemail'
@@ -211,25 +219,27 @@ class HomepageModule extends Component {
                   className='form-control'
                   id='senderemail'
                   placeholder='email@domain.com'
+				  style={{ width: "70vw", justifyContent: 'center' }}
                 />
               </div>
               <input
                 type='submit'
                 value='Submit'
-                className='btn btn-primary'
+                className='btn btn-outline-success mt-3 mb-3 btn-block'
                 onClick={this.getCredits}
               />
             </form>
           </div>
         </div>
 		
-		<br/>
 		
-		<div className='row'>
+		<br/>
+				<div className='row'>
 		
 			<h3>Kindly leave your thoughts below:</h3>
 		
 		</div>
+
 		
 		<div className='row' >
 					
@@ -237,7 +247,7 @@ class HomepageModule extends Component {
 		  <form onSubmit={this.postComment}>
 		    <div className="field">
 				<div className="control">
-					<textarea type="textarea" name="comment" placeholder="Add a comment" style={{ width: "70vw"  }} />
+					<textarea type="textarea" name="comment" placeholder="Add a comment" style={{ width: "70vw", justifyContent: 'center'  }} />
 				</div>
 			</div>	  
 			
@@ -256,6 +266,7 @@ class HomepageModule extends Component {
 		  </form>
 		
 		</div>
+		
 		<br/>
 		
         

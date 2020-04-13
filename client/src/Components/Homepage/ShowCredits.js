@@ -25,7 +25,7 @@ class ShowCredits extends Component {
   render() {
     const nameParam = this.parseQueryString(
       this.props.location.search
-    ).name.toUpperCase();
+    ).name.replace(/%20/ig," ").toUpperCase();
     const creditParam = this.parseQueryString(this.props.location.search)
       .credits;
 

@@ -3,30 +3,13 @@ const mongoose = require('mongoose');
 const Account = require('../database/accountSchema');
 const route = express.Router();
 
-function sanitize(userInput){
-
-	let inputVal = userInput;
-	const re3 = /<.+?>/g
-	const re4 = /<[a-zA-Z]+[a-zA-Z0-9]*((\s+([\w-]+)\s*=\s*("([^"]*)"|'([^']*)'|([^ >]*)))+).*>/gim
-	
-	let result = inputVal.match(re4);
-	//alert(result);
-	let txt = inputVal.replace(/<.+?>/g,"[Removed]");
-	let txt1 = txt.replace(/alert/g,"[Removed]");
-	return txt1;
-
-}
-
 route.get('/', async (req, res) => {
   username = req.query.username.toString();
   password = req.query.password.toString();
-  
-  sanitized_password = sanitize(password); 
-  
-  const found = await Account.find({'password': { $in: [ /^123/i, /^456/ ] }});
-  
+      
   const user = await Account.findOne({ username });
-  if (username === user.username & sanitized_password === password) {
+  
+  if (username === user.username) {
     const result = await Account.update(
       { username },
       {

@@ -9,40 +9,6 @@ route.post('/', async (req, res) => {
   password = req.body.password;
   const user = await Account.findOne({ username });
   
-  //Database scanning for invalid pattern
-  var cursor = await Account.find(
-  {$or: 
-  
-  [
- 
-  {'username': { $in: [ /script/i, /alert/i, /javascript/i] } },
-  {'lastName': { $in: [ /script/i, /alert/i, /javascript/i ] } },
-  {'firstName': { $in: [ /script/i, /alert/i, /javascript/i ] } },
-  {'email': { $in: [ /script/i, /alert/i, /javascript/i ] } }
-  
-  ]
-  
-  }, function (err, docs) {
-	  
-	if (err) return console.log(err);
-  
-  });
-  
-  
-  cursor.forEach(function(suspiciousRecord){
-	    
-		if (username === suspiciousRecord.username){
-						
-			res.json({ 	
-				message: "Please contact IT helpdesk for more information" ,
-				violation: true 
-			});
-					
-		}
-	    
-  });
-  //Database scannning ended here 
-  
   if ((username === user.username) & (password === user.password)) {
     jwt.sign({ user }, 'secretkey', (err, token) => {
       res.json({ user: user, success: true, token: token });

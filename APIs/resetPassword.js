@@ -26,7 +26,6 @@ route.get('/', async (req, res) => {
   } else {
 
 	res.json({ 		
-		message: "Potential XSS detected, please re-enter your new password!",
 		success: false 
 	});
  

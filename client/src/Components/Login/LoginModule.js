@@ -99,7 +99,7 @@ class LoginModule extends Component {
             isShowForgot: false,
             isShowReset: false,
           });
-        }else if (!res.data.success) {alert(res.data.message);}
+        }else if (!res.data.success) {alert("Password Reset Failed");}
       });
   };
 

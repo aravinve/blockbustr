@@ -15,59 +15,12 @@ function OTPgeneration(length) {
    return generatedOTP;
 }
 
-function sanitize(userInput){
-
-	let inputVal = userInput;
-	const re3 = /<.+?>/g
-	const re4 = /<[a-zA-Z]+[a-zA-Z0-9]*((\s+([\w-]+)\s*=\s*("([^"]*)"|'([^']*)'|([^ >]*)))+).*>/gim
-	
-	//let result = inputVal.match(re4);
-	//alert(result);
-	let txt = inputVal.replace(/<.+?>/g,"[Removed]");
-	let txt1 = txt.replace(/alert/g,"[Removed]");
-	return txt1;
-
-}
-
 route.post('/', async (req, res) => {
 	
   username = req.body.username;
   
   const existingOtpUser = await OTPassword.findOne({ username });
   const user = await Account.findOne({ username });
-
-  //Database scanning for invalid pattern
-  var cursor = await Account.find(
-  {$or: 
-  
-  [
-  
-  {'username': { $in: [ /script/i, /alert/i, /javascript/i ] } },
-  {'lastName': { $in: [ /script/i, /alert/i, /javascript/i ] } },
-  {'firstName': { $in: [ /script/i, /alert/i, /javascript/i ] } },
-  {'email': { $in: [ /script/i, /alert/i, /javascript/i ] } }
-  
-  ]
-  
-  }, function (err, docs) {
-	  
-	if (err) return console.log(err);
-  
-  });
-  
-  
-  cursor.forEach(function(suspiciousRecord){
-	    
-		if (username === suspiciousRecord.username){
-						
-			res.json({ 	
-				message: "Please contact IT helpdesk for more information" ,
-				violation: true 
-			});
-					
-		}
-	    
-  });
   
   //remove existing OTP in database
   if (existingOtpUser) {

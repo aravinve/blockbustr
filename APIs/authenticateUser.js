@@ -91,12 +91,28 @@ route.post('/postcomment', verifyToken, async (req, res) => {
 });
 
 route.post('/getcomments', async (req, res) => {
-  const commentarray = [];
-  const postedcomments = await Comment.find({});
+	
+  var commentarray = [];
+  var postedcomments = await Comment.find({});
   
+  
+  //Database scannning
   postedcomments.forEach(function(doc){
-	    
-		if (doc){
+		
+		if (doc.comment.match(/<.+?>/ig)){
+			
+			if 	(doc.comment.match(/script/ig)){
+				
+				
+			}else if(doc.comment.match(/alert/ig)){
+			
+			
+			}else{commentarray.push(doc);}
+		
+		}
+		
+		else{
+			
 			commentarray.push(doc);			
 					
 		}

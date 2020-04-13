@@ -1,11 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const hpp = require('./middleware/hpp-middleware');
 
 // Create App
 const app = express();
 // Connect Middleware
 app.use(bodyParser.json());
+app.use(hpp);
 // Create Database Connection
 const db = require('./config/keys').mongoURI;
 // Establish Database Connection

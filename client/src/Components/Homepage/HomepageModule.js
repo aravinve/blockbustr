@@ -122,9 +122,16 @@ class HomepageModule extends Component {
         },
       })
       .then((res) => {
-        console.log(res.data.name);
-        window.location =
-          '/showcredits?credits=' + res.data.credits + '&name=' + res.data.name;
+        if (res.data.success) {
+          window.location =
+            '/showcredits?credits=' +
+            res.data.credits +
+            '&name=' +
+            res.data.name;
+        } else {
+          window.location = '/';
+          alert("HPP Detected !!, Don't try to attack the system!!");
+        }
       });
   };
   render() {

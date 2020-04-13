@@ -18,6 +18,7 @@ class App extends React.Component {
       search: '',
       movieList: [],
       redirect: false,
+      isVulnerable: false,
     };
   }
 
@@ -51,6 +52,9 @@ class App extends React.Component {
     axios.get(`/API/search?q=${this.state.search}`).then((res) => {
       if (res.data.success) {
         this.setState({ movieList: res.data.q, redirect: true });
+      } else {
+        this.setState({ isVulnerable: true, movieList: [], redirect: false });
+        alert("HPP Detected !!, Don't try to attack the system!!");
       }
     });
   };
@@ -59,6 +63,7 @@ class App extends React.Component {
     const redirect = this.state.redirect ? (
       <Redirect to={`/API/search/${this.state.movieList}`} />
     ) : null;
+    const isVulnerable = this.state.isVulnerable ? <Redirect to='/' /> : null;
     return (
       <div className='App'>
         <Navbar
@@ -95,6 +100,7 @@ class App extends React.Component {
             <Route path='*' component={ErrorComponent} />} />
           </Switch>
           {redirect}
+          {isVulnerable}
         </BrowserRouter>
       </div>
     );

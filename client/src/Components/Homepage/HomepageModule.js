@@ -34,7 +34,6 @@ class HomepageModule extends Component {
     axios
       .post('/API/validateUser/post', data, { headers: headers })
       .then((res) => {
-        console.log(res.data);
         this.setState({ message: res.data.message });
       });
   };
@@ -122,7 +121,6 @@ class HomepageModule extends Component {
         },
       })
       .then((res) => {
-        console.log(res.data.name);
         window.location =
           '/showcredits?credits=' + res.data.credits + '&name=' + res.data.name;
       });

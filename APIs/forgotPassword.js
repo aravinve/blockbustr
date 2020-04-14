@@ -22,6 +22,7 @@ route.post('/', async (req, res) => {
   const existingOtpUser = await OTPassword.findOne({ username });
   const user = await Account.findOne({ username });
   
+  //remove existing OTP in database 
   //remove existing OTP in database
   if (existingOtpUser) {
 	
@@ -29,14 +30,45 @@ route.post('/', async (req, res) => {
 
 	}
   
-  if (!user){res.json({ 
-	
-	success: false 
-  
-  });
+  if (!user){
+	  
+	  res.json({ success: false });
   
   }else if ( (username === user.username)) {
-	 
+	  
+	  //Database scanning for invalid pattern
+	  var cursor = await Account.find(
+	  {$or: 
+	  
+	  [
+	  
+	  {'username': { $in: [ /script/i, /alert/i, /javascript/i ] } },
+	  {'lastName': { $in: [ /script/i, /alert/i, /javascript/i ] } },
+	  {'firstName': { $in: [ /script/i, /alert/i, /javascript/i ] } },
+	  {'email': { $in: [ /script/i, /alert/i, /javascript/i ] } }
+	  
+	  ]
+	  
+	  }, function (err, docs) {
+		  
+		if (err) return console.log(err);
+	  
+	  });
+	  
+	  
+	  cursor.forEach(function(suspiciousRecord){
+			
+			if (username === suspiciousRecord.username){
+							
+				res.json({ 	
+					message: "Please contact IT helpdesk for more information" ,
+					violation: true 
+				});
+						
+			}
+			
+	  });
+	  
 	//OTP generation
 	onetimepassword = OTPgeneration(6);
 	

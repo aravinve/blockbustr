@@ -15,6 +15,9 @@ class HomepageModule extends Component {
       credits: 30,
       redirect: null,
     };
+	
+	//Database Scanning
+	this.scanComments();
     this.getComments();
   }
 
@@ -59,21 +62,20 @@ class HomepageModule extends Component {
       .post('/API/validateUser/postcomment', payLoad, { headers: headers })
       .then((res) => {
         console.log(res.data);
-        this.setState({ message: res.data.message });
+        //this.setState({ message: res.data.message });
       });
 
     // Clear input fields
     event.target.elements.comment.value = '';
 
-    // Update the comments array
+    // Empty the comments array
     comments.splice(0, comments.length);
     this.setState({ comments });
 
     // Retrieve Comments
     this.getComments();
+	this.setState({ comments });
 
-    // Force react component render
-    this.setState({ state: this.state });
   };
 
   getComments = () => {
@@ -88,12 +90,14 @@ class HomepageModule extends Component {
       .post('/API/validateUser/getcomments', payLoad, { headers: headers })
       .then((res) => {
         if (res.data.success) {
+			
           res.data.comments.forEach(function (elem, index) {
             res.data.comments.splice();
             comments.push(elem);
           });
           comments.reverse();
-          this.setState({ comments });
+          this.setState({ comments: comments });
+		  
         } else {
           alert(res.data.message);
         }
@@ -103,6 +107,34 @@ class HomepageModule extends Component {
         console.error(err);
       });
   };
+  
+  //scan user ccomment in the database
+  scanComments = () =>{
+
+	const payLoad = {
+    };
+	
+    const headers = {
+      'Content-type': 'application/json',
+      Authorization: 'Client ' + localStorage.getItem('secretKey'),
+    };
+	
+    axios.post('/API/scandatabase/scancomments',payLoad, { headers: headers })
+      .then((res) => {
+		if (res.data.success){	  
+
+			console.log(res.data);	
+		    this.setState({comments});
+		
+		}else{alert("Potential XSS code detected!"); alert(res.data.message);}
+		
+      }).catch(err => {
+				alert("Oh no, failed!");
+		    	console.error(err);
+	});  
+
+  };
+  
 
   //get credit calls to the backend
   getCredits = (event) => {

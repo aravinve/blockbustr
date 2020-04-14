@@ -8,7 +8,7 @@ route.post('/', async (req, res) => {
   username = req.body.username;
   password = req.body.password;
   const user = await Account.findOne({ username });
-  
+
   if ((username === user.username) & (password === user.password)) {
     jwt.sign({ user }, 'secretkey', (err, token) => {
       res.json({ user: user, success: true, token: token });
@@ -25,32 +25,31 @@ route.post('/post', verifyToken, async (req, res) => {
     } else {
       res.json({
         message: 'Post Created',
-        authData
+        authData,
       });
     }
   });
 });
 
 route.post('/postcomment', verifyToken, async (req, res) => {
-	
   comment = req.body.comment;
   username = req.body.username;
-  
+
   let posted_comment = {};
   posted_comment.username = username;
   posted_comment.comment = comment;
 
   let commentModel = new Comment(posted_comment);
   await commentModel.save();
-  
+
   jwt.verify(req.token, 'secretkey', (err, authData) => {
     if (err) {
       res.sendStatus(403);
     } else {
       res.json({
         message: comment,
-		success: true,
-        authData
+        success: true,
+        authData,
       });
     }
   });
@@ -59,45 +58,38 @@ route.post('/postcomment', verifyToken, async (req, res) => {
 route.post('/getcomments', async (req, res) => {
   const commentarray = [];
   const postedcomments = await Comment.find({});
-  
-  postedcomments.forEach(function(doc){
-	    
-		if (doc){
-			commentarray.push(doc);			
-					
-		}
-	    
+
+  postedcomments.forEach(function (doc) {
+    if (doc) {
+      commentarray.push(doc);
+    }
   });
-	
-	jwt.verify(req.token, 'secretkey', (err, authData) => {
-	  
-	  if ((!commentarray)) {
-		
-		res.json({success: false, message:"Oh, no"});
-	  
-	  } else {
-		  
-		  res.json({
-			comments: commentarray,
-			success: true,
-			authData
-		  });
-	  }
-	});
+
+  jwt.verify(req.token, 'secretkey', (err, authData) => {
+    if (!commentarray) {
+      res.json({ success: false, message: 'Oh, no' });
+    } else {
+      res.json({
+        comments: commentarray,
+        success: true,
+        authData,
+      });
+    }
+  });
 });
 
 route.get('/getcredits', verifyToken, async (req, res) => {
-
   jwt.verify(req.token, 'secretkey', (err, authData) => {
     if (err) {
       res.sendStatus(403);
     } else {
-      const name = req.query.name
-      const credits = req.query.credits
+      const name = req.query.name;
+      const credits = req.query.credits;
 
       res.json({
-        credits:credits ,
-        name:name
+        credits: credits,
+        name: name,
+        success: true,
       });
     }
   });

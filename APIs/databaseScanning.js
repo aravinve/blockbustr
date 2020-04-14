@@ -23,22 +23,22 @@ route.post('/scancomments', async (req, res) => {
 		sanitizedDoc = suspiciousDoc;
 		
 		//first level
-		if (suspiciousDoc.match(/<.+?>/ig) || suspiciousDoc.match(/script/ig) || suspiciousDoc.match(/javascript/ig) ){
+		if (suspiciousDoc.match(/(<.+?>)/ig) || suspiciousDoc.match(/script/ig) || suspiciousDoc.match(/javascript/ig) || suspiciousDoc.match(/;/ig)){
 						
 			riskScore += 1;
 			finalRiskScore = riskScore;
 			
 			//second level
-			if (doc.comment.match(/;/ig)){
+			if (suspiciousDoc.match(/;/ig) || suspiciousDoc.match(/([on]\w+\s*[=]\s*\w+)/ig) ){
 
 				riskScore += 1;
-				sanitizedDoc = sanitizedDoc.replace(/;/ig,"&sc");	
+				sanitizedDoc = sanitizedDoc.replace(/;/ig,"&sc");			
 		
 				let update = await Comment.updateOne({_id:doc.id},{$set: {comment:sanitizedDoc}});
 				finalRiskScore = riskScore;
 							
 				//third level
-				if(suspiciousDoc.match(/img/ig) || suspiciousDoc.match(/escape/ig) || suspiciousDoc.match(/alert/ig) || suspiciousDoc.match(/onerror/ig)){
+				if(suspiciousDoc.match(/img/ig) || suspiciousDoc.match(/escape/ig) || suspiciousDoc.match(/alert/ig)){
 					
 					riskScore += 1;
 					sanitizedDoc = sanitizedDoc.replace(/</ig,"&lt");

@@ -46,6 +46,8 @@ class HomepageModule extends Component {
 	
 	const comment = event.target.elements.comment.value.trim();
 	const name = this.props.user.username;	
+	
+
 
 	
     const headers = {

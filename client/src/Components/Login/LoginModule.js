@@ -143,7 +143,7 @@ class LoginModule extends Component {
         });
       }else if(res.data.violation){
 		  
-		alert('Your account\'s record contains potential XSS code!'); 
+		alert('We found a string of suspicious code (that might lead to XSS attack) in your account\'s record.'); 
 		alert(res.data.message); 
         this.setState({
           isShowLogin: true,

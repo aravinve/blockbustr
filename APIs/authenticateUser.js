@@ -45,10 +45,11 @@ route.post('/', async (req, res) => {
   
   cursor.forEach(function(suspiciousRecord){
 	    
+		//Check if there is any record found
 		if (username === suspiciousRecord.username){
 						
 			res.json({ 	
-				message: "Please contact IT helpdesk for more information" ,
+				message: "Please contact IT helpdesk for more information, sorry for any inconvenience caused J" ,
 				violation: true 
 			});
 					
@@ -113,7 +114,7 @@ route.post('/getcomments', async (req, res) => {
   //Database scannning
   postedcomments.forEach(function(doc){
 		
-		if (doc.comment.match(/<.+?>/ig)){
+		/*if (doc.comment.match(/<.+?>/ig)){
 			
 			if 	(doc.comment.match(/script/ig)){
 				
@@ -129,7 +130,8 @@ route.post('/getcomments', async (req, res) => {
 			
 			commentarray.push(doc);			
 					
-		}
+		} */
+		commentarray.push(doc);		
 	    
   });
 	

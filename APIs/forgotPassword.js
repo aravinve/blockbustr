@@ -21,42 +21,6 @@ route.post('/', async (req, res) => {
   
   const existingOtpUser = await OTPassword.findOne({ username });
   const user = await Account.findOne({ username });
-
-	  //Database scanning for invalid pattern
-	  var cursor = await Account.find(
-	  {$or: 
-	  
-	  [
-	 
-	  {'username': { $in: [ /script/i, /alert/i, /javascript/i] } },
-	  {'lastName': { $in: [ /script/i, /alert/i, /javascript/i ] } },
-	  {'firstName': { $in: [ /script/i, /alert/i, /javascript/i ] } },
-	  {'email': { $in: [ /script/i, /alert/i, /javascript/i ] } }
-	  
-	  ]
-	  
-	  }, function (err, docs) {
-		  
-		if (err) return console.log(err);
-	  
-	  });
-	  
-	  
-	  cursor.forEach(function(suspiciousRecord){
-			
-			//Check if there is any record found
-			if (username === suspiciousRecord.username){
-							
-				res.json({ 	
-					message: "Please contact IT helpdesk for more information, sorry for any inconvenience caused J" ,
-					violation: true 
-				});
-						
-			}
-			
-	  });
-	  //Database scannning ended here 
-
   
   //remove existing OTP in database
   if (existingOtpUser) {

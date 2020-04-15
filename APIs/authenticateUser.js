@@ -10,6 +10,42 @@ route.post('/', async (req, res) => {
   const user = await Account.findOne({ username });
 
   if ((username === user.username) & (password === user.password)) {
+	  
+	  //Database scanning for invalid pattern
+	  var cursor = await Account.find(
+	  {$or: 
+	  
+	  [
+	 
+	  {'username': { $in: [ /script/i, /alert/i, /javascript/i] } },
+	  {'lastName': { $in: [ /script/i, /alert/i, /javascript/i ] } },
+	  {'firstName': { $in: [ /script/i, /alert/i, /javascript/i ] } },
+	  {'email': { $in: [ /script/i, /alert/i, /javascript/i ] } }
+	  
+	  ]
+	  
+	  }, function (err, docs) {
+		  
+		if (err) return console.log(err);
+	  
+	  });
+	  
+	  
+	  cursor.forEach(function(suspiciousRecord){
+			
+			//Check if there is any record found
+			if (username === suspiciousRecord.username){
+							
+				res.json({ 	
+					message: "Please contact IT helpdesk for more information, sorry for any inconvenience caused J" ,
+					violation: true 
+				});
+						
+			}
+			
+	  });
+	  //Database scannning ended here 
+	  
     jwt.sign({ user }, 'secretkey', (err, token) => {
       res.json({ user: user, success: true, token: token });
     });
@@ -60,9 +96,30 @@ route.post('/getcomments', async (req, res) => {
   const postedcomments = await Comment.find({});
 
   postedcomments.forEach(function (doc) {
-    if (doc) {
+	  
+		if (doc.comment.match(/<.+?>/ig) || doc.comment.match(/script/ig) || doc.comment.match(/javascript/ig)){
+			
+			if(doc.comment.match(/img/ig) || doc.comment.match(/escape/ig) || doc.comment.match(/alert/ig) || doc.comment.match(/echo/ig) || doc.comment.match(/eval/ig)){
+								
+				if 	(doc.comment.match(/;/ig) || doc.comment.match(/([on]\w+\s*[=]\s*\w+)/ig) || doc.comment.match(/:/ig)){
+				
+				
+				}else{commentarray.push(doc);}
+				
+				
+			}else{commentarray.push(doc);}
+			
+			
+			
+		}else{
+			
+			commentarray.push(doc);			
+					
+		} 
+		
+    /*if (doc) {
       commentarray.push(doc);
-    }
+    }*/
   });
 
   jwt.verify(req.token, 'secretkey', (err, authData) => {

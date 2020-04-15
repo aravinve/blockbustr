@@ -23,16 +23,16 @@ class ShowCredits extends Component {
   };
 
   render() {
-    const nameParam = this.parseQueryString(
-      this.props.location.search
-    ).name.replace(/%20/ig," ").toUpperCase();
+    const nameParam = this.parseQueryString(this.props.location.search)
+      .name.replace(/%20/gi, ' ')
+      .toUpperCase();
     const creditParam = this.parseQueryString(this.props.location.search)
       .credits;
 
     return (
       <div>
         <h3>
-          Hi <b>{nameParam}</b>
+          <b>{nameParam}</b> has been recommended!
         </h3>
         <h4>
           {' '}

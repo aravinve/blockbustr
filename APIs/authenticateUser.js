@@ -10,6 +10,7 @@ route.post('/', async (req, res) => {
   const user = await Account.findOne({ username });
   
   if ((username === user.username) & (password === user.password)) {
+	  
     jwt.sign({ user }, 'secretkey', (err, token) => {
       res.json({ user: user, success: true, token: token });
     });
@@ -61,7 +62,7 @@ route.post('/getcomments', async (req, res) => {
   const postedcomments = await Comment.find({});
   
   postedcomments.forEach(function(doc){
-	    
+		
 		if (doc){
 			commentarray.push(doc);			
 					

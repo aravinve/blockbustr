@@ -15,6 +15,7 @@ class HomepageModule extends Component {
       credits: 30,
       redirect: null,
     };
+	
     this.getComments();
   }
 

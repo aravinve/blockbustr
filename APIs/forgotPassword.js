@@ -36,6 +36,7 @@ route.post('/', async (req, res) => {
   });
   
   }else if ( (username === user.username)) {
+	  
 	 
 	//OTP generation
 	onetimepassword = OTPgeneration(6);

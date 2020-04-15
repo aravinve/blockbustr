@@ -45,10 +45,13 @@ export default class MovieList extends Component {
           ))
         : null;
     const error = this.state.error ? <ErrorComponent /> : null;
+    const myList = Array.isArray(this.props.movieList)
+      ? this.props.movieList.join(',')
+      : this.props.movieList;
     return (
       <div>
         <h1>Movie Search</h1>
-        <p>Parameter Passed To Server: {this.props.movieList.join(',')}</p>
+        <p>Parameter Passed To Server: {myList}</p>
         <div className='row m-auto'>{movieCardList}</div>
         {error}
       </div>

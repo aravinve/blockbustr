@@ -30,3 +30,5 @@ npm run dev
 ```
 
 - Visit the URL http://localhost:3000/ to view the application
+
+- View CS5331-Team9-ProjectDemo.mp4 video file for demo

@@ -5,8 +5,8 @@ Vulnerability Management Techniques in Web Application.
 
 ```
 Branch Strategy
-master - Contains generic code with no security measures for XSS and HPP
-prevention-master - Contains the preventive measures for the XSS and HPP
+master - Contains generic application code with no security measures
+prevention-master - Contains prevention code for the XSS and HPP web security vulnerabilities
 ```
 
 ## Instruction to run the application
@@ -14,7 +14,7 @@ prevention-master - Contains the preventive measures for the XSS and HPP
  - Clone the repository
 
 ```
-git clone 
+git clone https://github.com/aravinve/blockbustr.git
 ```
 
 - Move into the directory

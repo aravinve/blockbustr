@@ -11,7 +11,7 @@ prevention-master - Contains prevention code for the XSS and HPP web security vu
 
 ## Instruction to run the application
 
- - Clone the repository
+- Clone the repository
 
 ```
 git clone https://github.com/aravinve/blockbustr.git
@@ -21,6 +21,25 @@ git clone https://github.com/aravinve/blockbustr.git
 
 ```
 cd blockbustr
+```
+
+- Install Server Dependencies
+
+```
+npm install
+```
+
+- Install Client Dependencies
+
+```
+cd client
+npm install
+```
+
+- Go back to root directory
+
+```
+cd ..
 ```
 
 - Run npm script to start the development environment
